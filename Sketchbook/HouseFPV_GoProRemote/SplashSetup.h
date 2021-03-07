@@ -10,8 +10,14 @@
   #include "SplashExtra.h"
 #endif
 
+#ifdef USER_SPLASH_JPEG
+  #include "SplashJpegHelper.h"
+  #include "SplashTitleJpeg.h"
+#endif
+
 void userSplash()
 {
+  #ifdef USER_SPLASH_TEXT
   tft.fillScreen(USER_SPLASH_DEFAULT_BG);
   tft.setTextColor(USER_SPLASH_DEFAULT_TXT, USER_SPLASH_DEFAULT_BG);
   
@@ -29,6 +35,11 @@ void userSplash()
   tft.setTextColor(USER_SPLASH_LINE_3_TXT, USER_SPLASH_LINE_3_BG);
   tft.setCursor(USER_SPLASH_LINE_3_X, USER_SPLASH_LINE_3_Y);
   tft.println(USER_SPLASH_LINE_3);
+  #endif
+
+  #ifdef USER_SPLASH_JPEG
+  renderJPEG(housefpv_splash_title, sizeof(housefpv_splash_title), 0, 0);
+  #endif
   
   delay(USER_SPLASH_DISPLAY_SHOW_TIME);
 
