@@ -82,6 +82,6 @@ TFT_PINK, TFT_BROWN, TFT_GOLD, TFT_SILVER, TFT_SKYBLUE, TFT_VIOLET
 #define USER_RESET_WIFI_STR "rWifi"
 #define USER_WIFI_AP_NAME "HouseFPV Remote"
 
-// #define USER_DISABLE_WIFI  /* Comment out to disable connection to GoPro and SoftAP for testing */
+// #define USER_DISABLE_WIFI  /* Uncomment to disable connection to GoPro and SoftAP for testing */
 
 #endif /* USERCONFIG_H */
