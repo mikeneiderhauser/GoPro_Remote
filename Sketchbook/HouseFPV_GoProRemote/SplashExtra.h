@@ -7,6 +7,9 @@
 
 #include "UserConfig.h"
 
+#include "SplashJpegHelper.h"
+#include "SplashSendit.h"
+
 void userSplashTransition() {
   tft.fillScreen(TFT_WHITE);
   delay(100);
@@ -18,7 +21,7 @@ void userSplashTransition() {
   delay(100);
 }
 
-void userSplashExtra() {
+void userSplashExtra4LineText() {
   userSplashTransition();
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
@@ -35,6 +38,18 @@ void userSplashExtra() {
   tft.setCursor(30, 100);
   tft.println("BE IT");
   delay(750);
+
+}
+
+void userSplashExtraImage() {
+  // NOTE DO NOT USE PROGRESSIVE ENCODING ON THE JPEG!
+  renderJPEG(housefpv_sendit, sizeof(housefpv_sendit), 0, 0);
+  delay(3000);
+}
+
+void userSplashExtra() {
+  //userSplashExtra4LineText();
+  userSplashExtraImage();
 }
 
 

@@ -25,6 +25,7 @@ Follow instructions on their github to install a copy without library manager
 * [WiFiManager v2.0.3-alpha (tzapu)](https://github.com/tzapu/WiFiManager)
 * WiFi - Arduino Built-In
 * [ArduinoHTTPClient v0.4.0](https://github.com/arduino-libraries/ArduinoHttpClient)
+* [JPEGDecoder v1.8.0](https://github.com/Bodmer/JPEGDecoder)
 
 ## Setup / Usage
 * Download and install Arduino (Tested on 1.8.13)
