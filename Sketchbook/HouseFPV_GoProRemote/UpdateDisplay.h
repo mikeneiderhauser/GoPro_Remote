@@ -96,4 +96,10 @@ void failedWifiTFT() {
   tft.println("WiFi CMD!");
 }
 
+void preventBurnTFT() {
+  tft.fillScreen(TFT_BLACK);
+  tft.setTextSize(1);
+  tft.setTextColor(TFT_BLACK, TFT_BLACK);
+}
+
 #endif /* UPDATEDISPLAY_H */

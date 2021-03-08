@@ -15,6 +15,7 @@
 ConsoleMenu* remote_menu = NULL;
 MENU_POINTER m = NULL;
 bool menu_displayed = false;
+bool sleep_due_to_inactivity = false;
 String batStr = "";
 TFT_eSPI tft = TFT_eSPI();
 WiFiManager wifiManager;
@@ -23,7 +24,10 @@ std::stack <String> updates;
 /* for screen update interval */
 unsigned long currentMillis = 0;
 unsigned long prevScreeUpdate = 0;
-unsigned long updateMillisInterval = (60 * 1000);
+unsigned long prevButtonInput = 0;
+
+unsigned long updateMillisInterval = USER_TFT_REFRESH_INTERVAL;
+unsigned long screenOffMillisInterval = USER_TFT_OFF_INACTIVITY_INTERVAL;
 
 
 /* Helper includes */
@@ -102,10 +106,27 @@ void sendGPUpdate(String m) {
 void loop() {
   /* Main Processing loop */
   currentMillis = millis();
-  /* Force screen update every updateMillisInterval */
-  if (currentMillis - prevScreeUpdate >= updateMillisInterval) {
-    menu_displayed = false;
-    Serial.println("Forcing Screen Refresh");
+  
+    /* clear screen to prevent burnin from inactivity */
+  if (currentMillis - prevButtonInput >= screenOffMillisInterval) {
+    menu_displayed = true;  // fake that screen has been updated
+    Serial.println("Writing all Black to screen to prevent burn in");
+    Serial.println("Putting device in deep sleep to save battery");
+    if (! sleep_due_to_inactivity) {
+      preventBurnTFT();
+    }
+    sleep_due_to_inactivity = true;
+    // TODO some interrupt to bring out of deep sleep.. safest to just hit reset button for now
+    esp_deep_sleep_start();
+  }
+  else
+  {
+    sleep_due_to_inactivity = false;
+    /* Force screen update every updateMillisInterval */
+    if (currentMillis - prevScreeUpdate >= updateMillisInterval) {
+      menu_displayed = false;
+      Serial.println("Forcing Screen Refresh");
+    }
   }
 
   /* Handle display update */
@@ -132,8 +153,10 @@ void loop() {
         remote_menu->incMenuIdx();
       }
       menu_displayed = false;
+      prevButtonInput = millis();
     }
-  }
+  }  // end button 0
+  
   if (unsigned int event = button1->loop()) {
     if (event == EVENT_RELEASED) {
 
@@ -159,9 +182,11 @@ void loop() {
           updates.push(m->data);
         }
       }
+      
       menu_displayed = false;
+      prevButtonInput = millis();
     }
-  }
+  }  // end button 1
 
   /* Handle sending cfg updates */
   if (!updates.empty()) {
